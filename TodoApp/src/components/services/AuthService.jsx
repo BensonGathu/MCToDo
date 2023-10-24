@@ -1,7 +1,7 @@
 import api from "../utils/api";
 
 class AuthService {
-  async register(email, password) {
+  async register(first_name, last_name, email, password) {
     try {
       const response = await api.post("/api/auth/register", {
         first_name,
@@ -16,7 +16,6 @@ class AuthService {
   }
 
   async login(email, password) {
-    console.log("LLOOOGGIIINNGG");
     try {
       const response = await api.post("/api/auth/login", { email, password });
       return response.data;
@@ -27,6 +26,14 @@ class AuthService {
 
   async logout() {
     localStorage.removeItem("token");
+  }
+
+  setTokenInHeaders(token) {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
+
+  clearTokenFromHeaders() {
+    delete api.defaults.headers.common["Authorization"];
   }
 }
 

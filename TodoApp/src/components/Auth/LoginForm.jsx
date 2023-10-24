@@ -1,13 +1,27 @@
 import AuthService from "../services/AuthService";
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const LoginForm = () => {
- 
-  const handleLogin = async (e,email, password) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await AuthService.login(email, password);
-    } catch (error) {}
+      const response = await AuthService.login(userEmail, pwd);
+      const token = response.token;
+      localStorage.setItem("token", token);
+      AuthService.setTokenInHeaders(token);
+
+      navigate(from, { replace: true });
+    } catch (error) {
+      console.error("Login Error:", error);
+    }
   };
+
   return (
     <div>
       <form onSubmit={handleLogin}>
@@ -24,6 +38,7 @@ const LoginForm = () => {
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="name@flowbite.com"
             required
+            onChange={(e) => setUserEmail(e.target.value)}
           />
         </div>
         <div class="mb-6">
@@ -38,6 +53,7 @@ const LoginForm = () => {
             id="password"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             required
+            onChange={(e) => setPwd(e.target.value)}
           />
         </div>
 
