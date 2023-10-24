@@ -14,5 +14,5 @@ import {
 router.post("/", authMiddleware, CreateTask);
 router.get("/", authMiddleware, GetTasks);
 router.get("/:taskId", authMiddleware, GetSingleTask);
-router.patch("/:taskId", authMiddleware, UpdateTask);
+router.put("/:taskId", authMiddleware, UpdateTask);
 router.delete("/:taskId", authMiddleware, DeleteTask);

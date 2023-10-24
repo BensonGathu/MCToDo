@@ -6,9 +6,7 @@ import TaskModel from "../models/taskModel";
 export const CreateTask = async (req: Request, res: Response) => {
   try {
     const { title, description, status } = req.body;
-
     const user_id = req.user.id;
-
     const newTask = new TaskModel({ title, description, status, user_id });
     await newTask.save();
     res.status(201).json(newTask);
@@ -21,8 +19,8 @@ export const CreateTask = async (req: Request, res: Response) => {
 // Retrieve All Tasks
 export const GetTasks = async (req: Request, res: Response) => {
   try {
-    const userID = req.user.id;
-    const tasks = await TaskModel.find({ userID });
+    const user_id = req.user.id;
+    const tasks = await TaskModel.find({ user_id });
     res.json(tasks);
   } catch (error) {
     console.error(error);
@@ -34,8 +32,8 @@ export const GetTasks = async (req: Request, res: Response) => {
 export const GetSingleTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    const userID = req.user.id;
-    const task = await TaskModel.findOne({ _id: taskId, userID });
+    const user_id = req.user.id;
+    const task = await TaskModel.findOne({ _id: taskId, user_id });
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
     }
@@ -51,9 +49,9 @@ export const UpdateTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
     const { title, description, status } = req.body;
-    const userID = req.user.id;
+    const user_id = req.user.id;
 
-    const task = await TaskModel.findOne({ _id: taskId, userID });
+    const task = await TaskModel.findOne({ _id: taskId, user_id });
 
     if (!task) {
       return res.status(404).json({ error: "Task not found" });
@@ -83,11 +81,11 @@ export const UpdateTask = async (req: Request, res: Response) => {
 export const DeleteTask = async (req: Request, res: Response) => {
   try {
     const { taskId } = req.params;
-    const userID = req.user.id;
+    const user_id = req.user.id;
 
     const deletedTask = await TaskModel.findOneAndDelete({
       _id: taskId,
-      userID,
+      user_id,
     });
 
     if (!deletedTask) {
