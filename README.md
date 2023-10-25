@@ -31,10 +31,12 @@ Before you begin, ensure you have met the following requirements:
    cd MCToDo
 
 3. Navigate to TodoApp
+    ```bash
     cd TodoApp
     npm install
 
 4. Navigate to TodoApis
+    ```bash
     cd TodoApis
     npm install
 
@@ -46,10 +48,11 @@ Before you begin, ensure you have met the following requirements:
 
 
 6. Start both Server
-
+    ```bash
     cd TodoApis
     npm run start
 
+    
     cd TodoApp
     npm run dev
 
