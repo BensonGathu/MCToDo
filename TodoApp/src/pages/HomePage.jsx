@@ -1,10 +1,11 @@
-const HomePage = ()=>{
-return (
+import TaskList from "../components/Task/TaskList";
+
+const HomePage = () => {
+  return (
     <div>
-        HomePAge
+      <TaskList />
     </div>
-)
+  );
+};
 
-}
-
-export default HomePage
+export default HomePage;
