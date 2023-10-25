@@ -1,21 +1,27 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { FaPhone, FaEnvelope } from "react-icons/fa"; // Import icons from a library of your choice
+import AuthService from "../services/AuthService";
 
 const Navbar = (props) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
+  const isLoggedIn = AuthService.isLoggedIn();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/login";
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // List of navbar items
+  const handleLogout = async () => {
+    await AuthService.logout();
+    navigate(from, { replace: true });
+  };
+
   const navItems = [
-    { path: "/", text: "Tasks" },
-    { path: "/login", text: "Login" },
-    { path: "/logout", text: "Logout" },
-    { path: "/registration", text: "SignUp" },
+    isLoggedIn ? { path: "/", text: "Tasks" } : "",
+    !isLoggedIn ? { path: "/login", text: "Login" } : "",
   ];
 
   const isLargeScreen = window.innerWidth >= 768;
@@ -85,6 +91,13 @@ const Navbar = (props) => {
                   </NavLink>
                 </li>
               ))}
+              {isLoggedIn ? (
+                <li>
+                  <button onClick={handleLogout} className="">
+                    Logout
+                  </button>
+                </li>
+              ) : null}
             </ul>
           </div>
         </div>

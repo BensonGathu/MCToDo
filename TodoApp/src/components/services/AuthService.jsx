@@ -35,6 +35,11 @@ class AuthService {
   clearTokenFromHeaders() {
     delete api.defaults.headers.common["Authorization"];
   }
+  isLoggedIn() {
+    const token = localStorage.getItem("token");
+
+    return !!token;
+  }
 }
 
 export default new AuthService();

@@ -69,7 +69,7 @@ function TaskList() {
   return (
     <div className="bg-gray-100 min-h-screen p-4">
       <div className="flex items-center  justify-center mb-4">
-        <h2 className="text-2xl   font-bold">Task List</h2>
+        <h2 className="text-2xl mr-5 font-bold">Task List</h2>
 
         <button
           onClick={handleAddNewTask}
@@ -85,6 +85,7 @@ function TaskList() {
             <h3 className="text-lg font-semibold">Create a New Task</h3>
             <div className="flex flex-col">
               <input
+                minLength={5}
                 required
                 type="text"
                 placeholder="Task Title"
@@ -125,9 +126,9 @@ function TaskList() {
             key={task._id}
             className="bg-white shadow-md rounded-lg p-4 transition transform hover:scale-105 duration-300"
           >
-            <Link to={`/tasks/${task._id}`}>
-              <div className="flex justify-between items-center mb-4">
-                <div>
+            <div className="flex justify-between items-center mb-4">
+              <div className="flex-1">
+                <Link to={`/tasks/${task._id}`}>
                   <h3 className="text-lg font-semibold">{task.title}</h3>
                   <p className="text-gray-600">{task.description}</p>
                   <p
@@ -137,25 +138,25 @@ function TaskList() {
                   >
                     Status: {task.status}
                   </p>
-                </div>
-                <button
-                  onClick={() =>
-                    handleMarkCompleted(
-                      task._id,
-                      task.title,
-                      task.description,
-                      "completed"
-                    )
-                  }
-                  className={`bg-${
-                    task.status === "completed" ? "gray" : "green"
-                  }-500 text-white p-2 rounded-lg mt-2`}
-                  disabled={task.status === "completed"}
-                >
-                  {task.status === "completed" ? "Completed" : "Mark Completed"}
-                </button>
+                </Link>
               </div>
-            </Link>
+              <button
+                onClick={() =>
+                  handleMarkCompleted(
+                    task._id,
+                    task.title,
+                    task.description,
+                    "completed"
+                  )
+                }
+                className={`bg-${
+                  task.status === "completed" ? "gray" : "green"
+                }-500 text-white p-2 rounded-lg mt-2`}
+                disabled={task.status === "completed"}
+              >
+                {task.status === "completed" ? "Completed" : "Mark Completed"}
+              </button>
+            </div>
           </li>
         ))}
       </ul>

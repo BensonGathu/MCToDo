@@ -23,10 +23,10 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
+    <div className="h-full">
       <form onSubmit={handleLogin}>
         <div class="mb-6">
-          <label
+           <label
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
@@ -36,7 +36,7 @@ const LoginForm = () => {
             type="email"
             id="email"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="name@flowbite.com"
+            placeholder="name@gmail.com"
             required
             onChange={(e) => setUserEmail(e.target.value)}
           />
@@ -63,6 +63,12 @@ const LoginForm = () => {
         >
           Submit
         </button>
+        <div class="text-sm font-medium text-gray-500 dark:text-gray-300 m-4">
+          Dont have an account ?{" "}
+          <a href="" class="text-blue-700 hover:underline dark:text-blue-500">
+            <Link to="/registration">Sign Up</Link>
+          </a>
+        </div>
       </form>
     </div>
   );

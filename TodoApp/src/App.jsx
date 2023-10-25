@@ -6,7 +6,11 @@ import LoginForm from "./components/Auth/LoginForm";
 import RegistrationForm from "./components/Auth/Registration";
 import HomePage from "./pages/HomePage";
 import TaskDetails from "./components/Task/TaskDetails";
+import AuthService from "../src/components/services/AuthService";
+import RequireAuth from "./components/services/RequireAuth";
 function App() {
+  const isLoggedIn = AuthService.isLoggedIn();
+
   const socket = io("http://localhost:4000");
   return (
     <div className="App">
@@ -17,8 +21,10 @@ function App() {
           <Route path="registration" element={<RegistrationForm />} />
           <Route path="login" element={<LoginForm />} />
 
-          <Route path="/" element={<HomePage />} />
-          <Route path="/tasks/:taskId" element={<TaskDetails />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/tasks/:taskId" element={<TaskDetails />} />
+          </Route>
         </Routes>
 
         <Footer />

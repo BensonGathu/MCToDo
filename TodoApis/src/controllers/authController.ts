@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
 import User from "../models/userModel";
+const revokedTokens = new Set();
 
 const signToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_TOKEN, {
@@ -80,4 +81,10 @@ export const loginUser = async (req: Request, res: Response) => {
     console.error(error);
     res.status(500).json({ error: "Login failed" });
   }
+};
+
+export const logoutUser = async (req: Request, res: Response) => {
+  revokedTokens.add(req.header("Authorization"));
+
+  res.json({ message: "Logout successful" });
 };
