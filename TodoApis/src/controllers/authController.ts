@@ -10,7 +10,7 @@ const signToken = (id: string) => {
   });
 };
 
-// Generate a user ID (You can adjust this function based on your requirements)
+// Generate a user ID (Unique identifier)
 function generateId() {
   return "USR" + Math.random().toString(36).substr(2, 6);
 }
@@ -84,7 +84,8 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const logoutUser = async (req: Request, res: Response) => {
-  revokedTokens.add(req.header("Authorization"));
+
+  revokedTokens.add(req.token);
 
   res.json({ message: "Logout successful" });
 };

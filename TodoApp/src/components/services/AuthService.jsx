@@ -24,8 +24,14 @@ class AuthService {
     }
   }
 
-  async logout() {
+  async logout(token) {
     localStorage.removeItem("token");
+    try {
+      const response = await api.post("/api/auth/logout", { token });
+      return response.data;
+    } catch (error) {
+      throw error.response.data;
+    }
   }
 
   setTokenInHeaders(token) {
