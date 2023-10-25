@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TaskService from "../services/TaskService";
+import { Link } from "react-router-dom";
 
 function TaskList() {
   const [tasks, setTasks] = useState([]);
@@ -22,9 +23,10 @@ function TaskList() {
     fetchTasks();
   }, []);
 
-  const handleMarkCompleted = async (taskId) => {
+  const handleMarkCompleted = async (taskId, title, description, status) => {
+    console.log(taskId);
     try {
-      await TaskService.updateTaskStatus(taskId);
+      await TaskService.updateTask(taskId, title, description, status);
 
       // Update the task's status in the state
       setTasks((prevTasks) =>
@@ -43,7 +45,6 @@ function TaskList() {
 
   const handleCancelAddTask = () => {
     setShowAddTaskForm(false);
-    // Reset the new task form fields
     setNewTask({
       title: "",
       description: "",
@@ -55,7 +56,6 @@ function TaskList() {
       const createdTask = await TaskService.createTask(newTask);
       setTasks((prevTasks) => [createdTask, ...prevTasks]);
 
-      // Hide the task creation form and reset the form fields
       setShowAddTaskForm(false);
       setNewTask({
         title: "",
@@ -71,7 +71,6 @@ function TaskList() {
       <div className="flex items-center  justify-center mb-4">
         <h2 className="text-2xl   font-bold">Task List</h2>
 
-        {/* Button to Add New Task */}
         <button
           onClick={handleAddNewTask}
           className="bg-blue-500 text-white p-2 rounded-lg"
@@ -81,39 +80,43 @@ function TaskList() {
       </div>
 
       {showAddTaskForm ? (
-        <div className="p-4 bg-white shadow-md  rounded-lg">
-          <h3 className="text-lg font-semibold">Create a New Task</h3>
-          <div className="flex flex-col">
-            <input
-              type="text"
-              placeholder="Task Title"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 m-3"
-              value={newTask.title}
-              onChange={(e) =>
-                setNewTask({ ...newTask, title: e.target.value })
-              }
-            />
-            <textarea
-              placeholder="Task Description"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 m-3"
-              value={newTask.description}
-              onChange={(e) =>
-                setNewTask({ ...newTask, description: e.target.value })
-              }
-            />
+        <form onSubmit={handleCreateTask}>
+          <div className="p-4 bg-white shadow-md  rounded-lg">
+            <h3 className="text-lg font-semibold">Create a New Task</h3>
+            <div className="flex flex-col">
+              <input
+                required
+                type="text"
+                placeholder="Task Title"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 m-3"
+                value={newTask.title}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, title: e.target.value })
+                }
+              />
+              <textarea
+                required
+                placeholder="Task Description"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 m-3"
+                value={newTask.description}
+                onChange={(e) =>
+                  setNewTask({ ...newTask, description: e.target.value })
+                }
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={handleCancelAddTask}
+                className="text-red-500 mr-4"
+              >
+                Cancel
+              </button>
+              <button className="bg-green-500 text-white p-2 rounded-lg">
+                Create Task
+              </button>
+            </div>
           </div>
-          <div className="flex justify-end">
-            <button onClick={handleCancelAddTask} className="text-red-500 mr-4">
-              Cancel
-            </button>
-            <button
-              onClick={handleCreateTask}
-              className="bg-green-500 text-white p-2 rounded-lg"
-            >
-              Create Task
-            </button>
-          </div>
-        </div>
+        </form>
       ) : null}
       <br></br>
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -122,28 +125,37 @@ function TaskList() {
             key={task._id}
             className="bg-white shadow-md rounded-lg p-4 transition transform hover:scale-105 duration-300"
           >
-            <div className="flex justify-between items-center mb-4">
-              <div>
-                <h3 className="text-lg font-semibold">{task.title}</h3>
-                <p className="text-gray-600">{task.description}</p>
-                <p
-                  className={`text-${
-                    task.status === "completed" ? "green" : "red"
-                  }-500 font-semibold mt-2`}
+            <Link to={`/tasks/${task._id}`}>
+              <div className="flex justify-between items-center mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold">{task.title}</h3>
+                  <p className="text-gray-600">{task.description}</p>
+                  <p
+                    className={`text-${
+                      task.status === "completed" ? "green" : "red"
+                    }-500 font-semibold mt-2`}
+                  >
+                    Status: {task.status}
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    handleMarkCompleted(
+                      task._id,
+                      task.title,
+                      task.description,
+                      "completed"
+                    )
+                  }
+                  className={`bg-${
+                    task.status === "completed" ? "gray" : "green"
+                  }-500 text-white p-2 rounded-lg mt-2`}
+                  disabled={task.status === "completed"}
                 >
-                  Status: {task.status}
-                </p>
+                  {task.status === "completed" ? "Completed" : "Mark Completed"}
+                </button>
               </div>
-              <button
-                onClick={() => handleMarkCompleted(task._id)}
-                className={`bg-${
-                  task.status === "completed" ? "gray" : "green"
-                }-500 text-white p-2 rounded-lg mt-2`}
-                disabled={task.status === "completed"}
-              >
-                {task.status === "completed" ? "Completed" : "Mark Completed"}
-              </button>
-            </div>
+            </Link>
           </li>
         ))}
       </ul>
