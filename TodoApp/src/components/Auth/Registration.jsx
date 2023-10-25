@@ -11,6 +11,11 @@ const RegistrationForm = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || "/login";
 
+
+  /**
+ * Event handler for user registration.
+ * Attempts to register a user with the provided information (first name, last name, email, and password).
+ */
   const handleRegistration = async (e) => {
     e.preventDefault();
     try {

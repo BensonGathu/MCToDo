@@ -8,6 +8,11 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
+
+  /**
+   * Event handler for the login button click.
+   * Attempts to authenticate the user with the provided email and password.
+   */
   const handleLogin = async (e) => {
     e.preventDefault();
     try {

@@ -1,5 +1,7 @@
 import api from "../utils/api";
-
+/**
+ * Service class for handling Task-related actions.
+ */
 const TaskService = {
   //Fetching all tasks
   async getAllTasks() {
