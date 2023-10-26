@@ -32,6 +32,8 @@ class AuthService {
   // Log out the user by removing the authentication token from local storage.
   async logout(token) {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("userID");
     try {
       const response = await api.post("/api/auth/logout", { token });
       return response.data;
@@ -56,6 +58,13 @@ class AuthService {
     const token = localStorage.getItem("token");
 
     return !!token;
+  }
+
+  userInfo(){
+    const username = localStorage.getItem("username");
+    const userID = localStorage.getItem("userID");
+
+    return { username, userID };
   }
 }
 

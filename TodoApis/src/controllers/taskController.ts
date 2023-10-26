@@ -46,8 +46,6 @@ export const GetSingleTask = async (req: Request, res: Response) => {
 
 // Update a Task
 export const UpdateTask = async (req: Request, res: Response) => {
- 
-  
   try {
     const { taskId } = req.params;
     const { title, description, status } = req.body;

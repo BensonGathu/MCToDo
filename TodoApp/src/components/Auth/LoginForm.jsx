@@ -17,8 +17,11 @@ const LoginForm = () => {
     e.preventDefault();
     try {
       const response = await AuthService.login(userEmail, pwd);
+      console.log(response);
       const token = response.token;
       localStorage.setItem("token", token);
+      localStorage.setItem("username", response.user.username);
+      localStorage.setItem("userID", response.user.userID);
       AuthService.setTokenInHeaders(token);
 
       navigate(from, { replace: true });
@@ -31,7 +34,7 @@ const LoginForm = () => {
     <div className="h-full">
       <form onSubmit={handleLogin}>
         <div class="mb-6">
-           <label
+          <label
             for="email"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >

@@ -70,8 +70,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
     if (!passwordMatch) {
       return res.status(401).json({ error: "Invalid email or password" });
-    }
-
+    } 
     // Generate a JWT token for the authenticated user
     const token = signToken(user.id);
 

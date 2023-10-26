@@ -1,3 +1,4 @@
+import React from "react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import AuthService from "../services/AuthService";
@@ -25,6 +26,9 @@ const Navbar = (props) => {
   ];
 
   const isLargeScreen = window.innerWidth >= 768;
+
+  // Retrieve username and userID from AuthService
+  const { username, userID } = AuthService.userInfo();
 
   return (
     <div className="mb-40">
@@ -92,11 +96,22 @@ const Navbar = (props) => {
                 </li>
               ))}
               {isLoggedIn ? (
-                <li>
-                  <button onClick={handleLogout} className="">
-                    Logout
-                  </button>
-                </li>
+                <>
+                  <li>
+                    <span>
+                      Welcome, {username} (UserID: {userID})
+                    </span>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      type="button"
+                      class="px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
               ) : null}
             </ul>
           </div>
