@@ -5,7 +5,7 @@ export function setupSocket(server: Server): SocketServer {
   const io = new SocketServer(server, {
     cors: {
       origin: "*",
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST","PUT","DELETE"],
     },
   });
 
